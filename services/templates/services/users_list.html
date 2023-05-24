@@ -1,0 +1,14 @@
+<div class="user-list">
+    <form method="POST">
+        {% csrf_token %}
+        <select name="nickname" id="nickname-select">
+            <option value="">--Please choose an author--</option>
+            {% for u in users %}
+            <option value="{{ u.user.id }} {{ u.nickname }}">
+                {{ u.nickname }}
+            </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Select</button>
+    </form>
+</div>

@@ -1,0 +1,41 @@
+{% extends 'main_body/base.html' %}
+
+{% block content %}
+{% load common_tags %}
+{% load static %}
+<script src="{% static 'main_body/js/select.js' %} "></script>
+
+<section class="blog-action">
+    {% if request.user.is_authenticated %}
+    <button class="b-action"><a href="{% url 'new_post' %}">New post</a></button>
+    <button class="b-action"><a href="{% url 'favorites' %}">Favorite blogs</a></button>
+    {% endif %}
+    {% if user.is_authenticated and user.profile.nickname not in request.path %}
+        {% if user_info.f_user in user.profile.favorites.all %}
+            <button class="b-action"><a href="add_favorite">Unfollow</a></button>
+        {% else %}
+            <button class="b-action"><a href="add_favorite">Follow</a></button>
+        {% endif %}
+
+    <button class="b-action"><a href="{% url 'selected_blog' user.profile.nickname user.pk %}">My blog</a></button>
+        {% if user_info %}
+        <button class="b-action">
+            <details>
+                <summary>User info</summary>
+                <img src="{{ user_info.photo.url }}" height="100px">
+                <div class="inner-info">
+                    <u>Nickname:</u> {{ user_info.nickname }} <br>
+                    <u>Bio:</u> {{ user_info.bio }}<br>
+                    <u>Location:</u> {{ user_info.location }}<br>
+                    <u>Birth date:</u> {{ user_info.birth_date }}<br>
+                </div>
+            </details>
+        </button>
+        {% endif %}
+    {% get_users user %}
+    {% endif %}
+</section>
+<div class="blog-content">
+    {% show_posts %}
+</div>
+{% endblock %}

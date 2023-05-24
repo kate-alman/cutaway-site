@@ -1,0 +1,29 @@
+{% extends 'main_body/base.html' %}
+
+{% block content %}
+{% load common_tags %}
+{% load static %}
+<script src="{% static 'main_body/js/confirm_delete.js' %} "></script>
+<h1 id="label-title"><u>hello {{ user.username }}</u></h1>
+
+<div class="main-description">
+    <img src="{{ user_info.photo.url }}" height="350px" class="author" alt="photo">
+    <section class="profile">
+            <label class="general"><strong>Nickname:</strong></label><span>{{ user_info.nickname }}</span>
+            <label  class="general"><strong>Birth date:</strong></label><span>{{ user_info.birth_date }}</span>
+            <label class="general"><strong>Location:</strong></label><span>{{ user_info.location }}</span>
+            <label class="general"><strong>About me:</strong></label><span>{{ user_info.bio }}</span>
+    </section>
+</div>
+<div class="profile-action">
+    <button class="b-action"><a href="{% url 'change_info' user.username %}">Change info</a></button>
+    <button class="b-action"><a href="{% url 'password_change' %}">Change password</a></button>
+    <form onclick="confirm_delete()" action="{% url 'user_delete' user.pk %}" method="POST">
+        {% csrf_token %}
+        <button class="b-action" onclick="confirm_delete(event)">Delete account</button>
+    </form>
+
+</div>
+
+
+{% endblock %}

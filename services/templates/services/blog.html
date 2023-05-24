@@ -1,0 +1,21 @@
+{% extends 'main_body/base.html' %}
+
+{% block content %}
+{% load common_tags %}
+{% load static %}
+<script src="{% static 'main_body/js/select.js' %} "></script>
+
+<div class="counter">Unique page visits: {% show_counter request.path %}</div>
+<div class="blog-action">
+    {% if request.user.is_authenticated %}
+    <button class="b-action"><a href="{% url 'new_post' %}">New post</a></button>
+    <button class="b-action"><a href="{% url 'selected_blog' user.profile.nickname user.pk %}">My blog</a></button>
+    <button class="b-action"><a href="{% url 'favorites' %}">Favorite blogs</a></button>
+    {% get_users user %}
+    {% endif %}
+</div>
+<div class="blog-content">
+    {% show_posts %}
+</div>
+
+{% endblock %}

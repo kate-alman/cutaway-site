@@ -1,0 +1,69 @@
+{% extends 'main_body/base.html' %}
+{% load common_tags %}
+
+{% block content %}
+{% load static %}
+<link type="text/css" href="{% static 'main_body/css/services.css' %}" rel="stylesheet"/>
+<script src="{% static 'main_body/js/reveal.js' %} "></script>
+<div class="header">
+    <p class="title">kate alman project</p>
+    <img class="cloud-img" src="{% static 'main_body/images/cloud.png' %}" alt="clouds">
+</div>
+<div class="weather reveal">
+    <div class="weather-info">
+            {{ weather.weather }}
+    </div>
+</div>
+<div class="container-main-page">
+        <div class="block reveal">
+            <img class="main-img-left" src="{% static 'main_body/images/about_me.png' %}" alt="about_me">
+            <div class="block-left">
+                <h2><a href="{% url 'about' %}" class="block-title">Немного меня</a></h2>
+                <p class="block-description">Сайт задумывался как визитка. Получилось, что получилось.
+                    Буду рада, если Вы посмотрите, попробуете и дадите обратную связь.
+                    А перейдя по <a href="{% url 'about' %}">ссылке</a>, Вы можете посмотреть на меня и на то, что я умею и делаю.
+                    Добра 🙃 </p>
+            </div>
+        </div>
+        <div class="block reveal">
+            <div class="block-right">
+                <h2><a href="#" class="block-title">Личный кабинет</a></h2>
+                <p class="block-description"> В личном кабинете можно загрузить фото, добавить информацию о себе,
+                    поменять пароль, а также удалить аккаунт. Пароли шифруются,
+                    так что можете быть спокойны за свои 'qwerty123' 🙃 </p>
+            </div>
+            <img class="main-img-right"  src="{% static 'main_body/images/personal_acc.png' %}" alt="personal_acc">
+        </div>
+        <div class="block reveal">
+            <img class="main-img-left" src="{% static 'main_body/images/blog.png' %}" alt="blog">
+            <div class="block-left">
+                <h2><a href="{% url 'blog' %}" class="block-title">Блог</a></h2>
+                <p class="block-description"> Поделитесь своими мыслями или почитайте других авторов,
+                    на которых можно подписаться. Также есть возможность просмотра постов
+                    по тегу, поиск по авторам.
+                </p>
+            </div>
+        </div>
+    <div class="block reveal">
+        <div class="block-right">
+            <h2><a href="{% url 'film' %}" class="block-title">Выбор фильма</a></h2>
+            <p class="block-description"> Сервис предлагает рандомный подбор фильма по некоторым критериям.
+                В дальнейшем планируется расширение функционала.
+            </p>
+        </div>
+        <img class="main-img-right" src="{% static 'main_body/images/film.png' %}" alt="film">
+    </div>
+    <div class="block reveal">
+        <img class="main-img-left" src="{% static 'main_body/images/future.png' %}" alt="future">
+        <div class="block-left">
+            <h2><a href="#" class="block-title">Что дальше?</a></h2>
+            <p class="block-description"> Есть кое-какие планы по добавлению контента и сервисов,
+                а также развитию уже существующих.
+                Оставайтесь на связи, скоро будет кое-что еще.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="counter">Unique page visits: {% show_counter request.path %}</div>
+{% endblock %}

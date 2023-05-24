@@ -1,0 +1,37 @@
+{% extends 'main_body/base.html' %}
+
+{% block content %}
+{% load static %}
+<script src="{% static 'main_body/js/select.js' %} "></script>
+
+<div class="content-center">
+    <div class="form-container">
+        <div class="form-title"><h1>Change post</h1></div>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label class="form-label">{{ form.title.label }}:</label> {{ form.title }}
+            <label class="form-label">{{ form.content.label }}:</label> {{ form.content }}
+
+            <label class="form-label">{{ form.image.help_text }}: </label>{{ form.image }} <br>
+            <label class="form-label">{{ form.tag.label }}: </label>{{ form.tag }}
+
+            <label class="form-label">{{ form.captcha.label }}</label><br> {{ form.captcha }}
+
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                    <div class="alert-error">
+                        <strong> {{ field.name }} error: {{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            <div class="submit">
+                <button class="b-action" type="submit">Save</button>
+                <button class="b-action" type="submit"><a href="{{ post.get_absolute_url }}">Cancel</a></button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

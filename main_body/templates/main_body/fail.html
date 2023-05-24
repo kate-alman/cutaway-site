@@ -1,0 +1,9 @@
+{% extends 'main_body/base.html' %}
+
+{% block content %}
+<div >
+    <p class="status">Что-то пошло не так.<br>
+        Можете попробовать еще раз любым из доступных <a href="{% url 'pay' %}">способов</a>,<br>
+        или просто закройте эту страницу.</p>
+</div>
+    {% endblock %}

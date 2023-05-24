@@ -1,0 +1,92 @@
+{% load static %}
+{% load common_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Welcome to MinoProject</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@500&display=swap" rel="stylesheet">
+
+    <link type="text/css" href="{% static 'main_body/css/base_style.css' %}" rel="stylesheet"/>
+    <link type="text/css" href="{% static 'main_body/css/main_page.css' %}" rel="stylesheet"/>
+    <link type="text/css" href="{% static 'main_body/css/services.css' %}" rel="stylesheet"/>
+    <link type="text/css" href="{% static 'main_body/css/forms.css' %}" rel="stylesheet"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
+            integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+          integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<table class="main-menu">{% show_top_menu request.path %}</table>
+
+<table class="table-content">
+
+    <!-- Блок контента -->
+    {% block content %}
+    {% endblock %}
+
+    {% if page_obj.has_other_pages %}
+    <nav class="list-pages">
+        <ul>
+            {% if page_obj.has_previous %}
+            <li class="page-num">
+                <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+            </li>
+            {% endif %}
+
+            {% for p in paginator.page_range %}
+            {% if page_obj.number == p %}
+            <li class="page-num page-num-selected">{{ p }}</li>
+            {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+            <li class="page-num">
+                <a href="?page={{ p }}">{{ p }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-num">
+                <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+            </li>
+            {% endif %}
+
+        </ul>
+    </nav>
+    {% endif %}
+    <!-- Конец блока контента -->
+
+    <td class="content">
+        <!-- Хлебные крошки -->
+        {% block breadcrumbs %}
+        {% endblock %}
+    </td>
+</table>
+
+</body>
+<footer class="footer">
+    <div class="footer__top" id="contacts">
+        <a class="contacts" target="_blank" href="https://t.me/alman_backdev"><img
+                src="{% static 'main_body/images/tg.png' %}" alt="Tg Blog"> Tg Blog</a>
+        <a class="contacts" target="_blank" href="https://instagram.com/katerok.a?igshid=ZDdkNTZiNTM="><img
+                src="{% static 'main_body/images/inst.png' %}" alt="Instagram"> Instagram</a>
+        <a class="contacts" target="_blank" href="https://github.com/kate-alman/"><img
+                src="{% static 'main_body/images/github.png' %}" alt="Github"> Github</a>
+        <a class="contacts" href="{% url 'feedback' %}"><img
+                src="{% static 'main_body/images/feedback.png' %}" alt="Github"> Feedback</a>
+    </div>
+    <tr>
+        <td>
+            <div class="maintainer">
+                <p>&copy; 2023 AlmanDev </p>
+            </div>
+        </td>
+    </tr>
+</footer>
+
+</html>

@@ -1,0 +1,33 @@
+{% extends 'main_body/base.html' %}
+
+{% block content %}
+
+<div class="container-service">
+    <div class="service">
+        <div class="service-content">
+            <a href="{% url 'blog' %}" class="service-link">Блог</a>
+            <p>Поделитесь своими мыслями или почитайте, что пишут другие.</p>
+        </div>
+    </div>
+
+    <div class="service">
+        <div class="service-content">
+            <a href="{% url 'film' %}" class="service-link">Подобрать фильм</a>
+            <p> Мини-помощник для выбора фильма. <br>
+                Просто выберите необходимые параметры или доверьтесь абсолютному случаю.</p>
+        </div>
+    </div>
+    <div class="service">
+        <div class="service-content">
+            <a href="{% url 'schema-swagger-ui' %}" class="service-link">Документация</a>
+            <p>Доступные методы и их описание - <a href="{% url 'schema-swagger-ui' %}" target="_blank">Swagger UI</a></p>
+        </div>
+    </div>
+    <div class="service">
+        <div class="service-content">
+            <a href="#" class="service-link">В работе...</a>
+            <p>Скоро тут будет что-то еще...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

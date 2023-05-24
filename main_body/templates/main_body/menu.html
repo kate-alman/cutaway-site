@@ -1,0 +1,33 @@
+{% load common_tags %}
+
+<ul class="menu">
+    {% for m_item in menu_items %}
+    {% if m_item.name|lower == selected %}
+        <li class="selected">{{ m_item.name }}</a></li>
+    {% elif m_item.name in have_child %}
+    <div class="dropdown">
+        <li class="menu_url"><a class="menu_url" href="{{ m_item.get_absolute_url }}">{{ m_item.name }}</a></li>
+        <div class="dropdown-content">
+            {% for item in have_child %}
+                {% if item == m_item.name %}
+                    {% get_child have_child item as childs %}
+                    {% for child in childs %}
+                        <a class="dropdown-item" href="{% url child.url %}">{{ child }}</a>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <li class="menu_url"><a class="menu_url" href="{{ m_item.get_absolute_url }}">{{ m_item.name }}</a></li>
+    {% endif %}
+    {% endfor %}
+    {% if request.user.is_authenticated %}
+    <li class="lk"> Welcome
+        <a class="lk" href="{% url 'user_detail' user.username %}">{{ user.username }}</a> 🧡 |
+        <a class="lk" href="{% url 'logout' %}">Logout</a></li>
+    {% else %}
+    <li class="lk"><a class="lk" href="{% url 'login' %}">Sign in</a> |
+        <a class="lk" href="{% url 'register' %}">Sign up</a></li>
+    {% endif %}
+</ul>

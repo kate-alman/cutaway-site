@@ -1,0 +1,106 @@
+{% extends 'main_body/base.html' %}
+{% load common_tags %}
+{% load static %}
+
+{% block content %}
+<script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script src="{% static 'main_body/js/popup.js' %} "></script>
+<h1 id="label-title"><u>About author</u></h1>
+<div class="main-description">
+    <section class="about-author">
+        Привет, странник! Я Катя-создатель этого сайта. <br>
+        Мое первое образование - юридическое, и я успешно работала в данной сфере более 6 лет.<br>
+        Помимо юриспруденции могу в кадры, бухгалтерию, логистику. Грубо говоря, на все руки от скуки.<br>
+        Ну и, конечно, техника и я неразлучны всю жизнь, от разбирания и сборки компьютеров, ноутбуков и что под руку
+        попадется, до их настройки. В конце 2021 года я решила (с пинка знакомого айтишника)
+        заняться учебой полноценно.<br>
+        В настоящее время я учусь и ищу работу в сфере IT, как бэкэнд разработчик на Python.<br>
+        <br>
+        <details>
+            <summary>На учебу и вкусняшки</summary>
+            <p><a href="#">СБ 4276 5600 2899 1125 Екатерина Александровна А.</a></p>
+            <p><a href="https://www.donationalerts.com/r/ekaterina_alman" target="_blank">DonationAlerts</a></p>
+            <details>
+                <summary>Web Money</summary>
+                <div class="webmoney">
+                    <div id='wm-widget'></div>
+
+                    <script type='text/javascript'
+                            src='https://merchant.webmoney.ru/conf/lib/widgets/wmApp.js?v=1.6'></script>
+                    <script type='text/javascript'>
+                        window.webmoney.widgets().PWYW.create({"lang":"en","data":{"paymentType":"wm","amount":10,"amountReadonly":false,"purse":"Z877550163557","desc":"Donate"},"style":{"title":"","titleNum":3}}).mount('wm-widget')
+                    </script>
+
+                    <div id='wm-widget-card'></div>
+
+                    <script type='text/javascript'
+                            src='https://merchant.webmoney.ru/conf/lib/widgets/wmApp.js?v=1.6'></script>
+                    <script type='text/javascript'>
+                        window.webmoney.widgets().PWYW.create({"lang":"en","data":{"paymentType":"card","amount":10,"amountReadonly":false,"purse":"Z877550163557","desc":"Donate"},"style":{"title":"","titleNum":3}}).mount('wm-widget-card')
+                    </script>
+                </div>
+            </details>
+        </details>
+
+    </section>
+    <section class="skills">
+        <strong>Что я знаю (и не только):</strong><br>
+        ✔ Python, OOP<br>
+        ✔ Git<br>
+        ✔ Linux, bash<br>
+        ✔ SQL, MySQL, PostgreSQL, SQLAlchemy, Alembic<br>
+        ✔ Algorithms (base)<br>
+        ✔ Regexp<br>
+        ✔ Django, DRF, Aiohttp<br>
+        ✔ HTML, CSS, JS<br>
+        ✔ CSV, JSON, XML<br>
+        ✔ API<br>
+        ✔ Network protocols (DNS, TPC/TLS, HTTP/S)<br>
+        ✔ keep learning<br>
+        <br>
+        <strong>Мои проекты:</strong><br>
+
+        <a class="project" href="#">✔ Этот сайт</a>
+        <div class="popup-container"><a href="javascript:PopUpShow()">Тык за подробностями</a></div>
+
+
+        <a class="project" href="https://github.com/kate-alman/VKBotPhotoContest" target="_blank">✔ ВК Бот</a>
+        <div class="popup-container"><a href="javascript:PopUpShow2()">Жмяк за подробностями</a></div>
+    </section>
+    <img class="author" src="{% static 'main_body/images/output.jpg' %}" alt="author">
+</div>
+
+<div class="out-popup" id="popup1">
+    <div class="inner-popup">
+        ✔ Реализовано на Django + PostgreSQL.<br>
+        ✔ Процесс авторизации и регистрации, поддержка личного кабинета с возможностью изменения данных и удаления
+        профиля.<br>
+        ✔ Сервис блога предполагает возможность написания своих постов и управления ими,
+        подписки на других авторов. Ссылки для новых постов создаются автоматически.<br>
+        ✔ Подключен API для выбора фильмов (рандомно по заданным параметрам), использована база кинопоиска.<br>
+        ✔ Настроено кэширование, подсчет уникальных посещений страниц через мидлвар, проверка сессий.<br>
+        ✔ Оптимизированы запросы к БД.<br>
+        ✔ Добавлены капчи, а то вдруг будет восстание машин.<br>
+        ✔ Фронт реализован с помощью HTML, CSS, JS. <br>
+        <button class="close" onclick="javascript:PopUpHide()">Hide</button>
+    </div>
+</div>
+<div class="counter">Unique page visits: {% show_counter request.path %}</div>
+<div class="out-popup" id="popup2">
+    <div class="inner-popup">
+        ✔ Реализован на Aiohttp и VK API (без использования сторонних библиотек).<br>
+        ✔ Поддерживает несколько бесед.<br>
+        ✔ Все состояния пользователей и игровых сессий хранятся в PostgreSQL.<br>
+        ✔ Для работы с БД использована SQLAlchemy + Alembic.<br>
+        ✔ Приложение разделено на микросервисы: poller, sender, worker.<br>
+        ✔ Для повышения отказоустойчивости всего приложения использован брокер сообщений - RabbitMQ -
+        разделяющий этапы получения сообщений из VK и саму логику приложения.<br>
+        ✔ Умеет переживать рестарт сервиса - если процесс останавливается и перезапускается во время игровых
+        сессий, он продолжается с того момента, где прервался.<br>
+        ✔ Развернут на витуальной машине в интернете.<br>
+        ✔ Дополнительно реализовано API администратора с использованием marshmallow. С проверкой авторизации через
+        сессии.<br>
+        <button class="close" onclick="javascript:PopUpHide2()">Hide</button>
+    </div>
+</div>
+{% endblock %}

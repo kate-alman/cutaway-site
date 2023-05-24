@@ -1,0 +1,87 @@
+{% extends 'main_body/base.html' %}
+
+{% block content %}
+
+{% load static %}
+<script src="{% static 'main_body/js/select.js' %} "></script>
+<script src="{% static 'main_body/js/numbers.js' %}"></script>
+
+<div class="container">
+    <div class="select-film">
+        <p class="select-description">Мини-помощник для выбора фильма.<br>
+            Просто выберите необходимые параметры или доверьтесь абсолютному случаю.</p><br>
+
+        <form method="post" id="selectize-form">
+            {% csrf_token %}
+
+            {% for f in form %}
+                <p><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
+                <div class="form-error">{{ f.errors }}</div>
+            {% endfor %}
+
+            <select class="js-chosen" name="genres" id="genre-select">
+                <option value="">--- Please choose a genre ---</option>
+                <option value="24">Аниме</option>
+                <option value="8">Биография</option>
+                <option value="11">Боевик</option>
+                <option value="10">Вестерн</option>
+                <option value="14">Военный</option>
+                <option value="5">Детектив</option>
+                <option value="33">Детский</option>
+                <option value="28">Для взрослых</option>
+                <option value="22">Документальный</option>
+                <option value="2">Драма</option>
+                <option value="31">Игра</option>
+                <option value="15">История</option>
+                <option value="13">Комедия</option>
+                <option value="27">Концерт</option>
+                <option value="23">Короткометражка</option>
+                <option value="3">Криминал</option>
+                <option value="4">Мелодрама</option>
+                <option value="16">Музыка</option>
+                <option value="18">Мультфильм</option>
+                <option value="20">Мюзикл</option>
+                <option value="26">Новости</option>
+                <option value="7">Приключения</option>
+                <option value="19">Семейный</option>
+                <option value="21">Спорт</option>
+                <option value="32">Ток-шоу</option>
+                <option value="1">Триллер</option>
+                <option value="17">Ужасы</option>
+                <option value="6">Фантастика</option>
+                <option value="9">Фильм-нуар</option>
+                <option value="12">Фэнтези</option>
+                <option value="29">Церемония</option>
+            </select>
+
+            <select name="year" id="year_select">
+                <option value="">--- Please choose an year (from) ---</option>
+                <script>
+            setNumbers('year_select', '1920', '2023');
+                </script>
+            </select>
+
+            <select name="rating" id="rating_select">
+                <option value="">--- Please choose a rating (from) ---</option>
+                <script>
+            setNumbers('rating_select', '1', '10');
+                </script>
+            </select>
+
+            <button class="btn-film" type="submit">Select</button>
+        </form>
+    </div>
+
+    <div class="film">
+        <img class="img-film" src="{{ film.posterUrl }}" alt="poster" width="1000px">
+        <div class="description">
+            Название: {{ film.title }}<br>
+            Жанры: {{ film.genres }}<br>
+            Рейтинг КП: {{ film.ratingKinopoisk }}<br>
+            Рейтинг Imdb: {{ film.ratingImdb }}<br>
+            Год выпуска: {{ film.year }}<br>
+            <a href="{{ film.url }}" target="_blank">Узнать подробнее</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

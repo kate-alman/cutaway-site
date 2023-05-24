@@ -1,0 +1,33 @@
+{% extends 'main_body/base.html' %}
+{% load common_tags %}
+
+{% block content %}
+{% load static %}
+<script src="{% static 'main_body/js/confirm_delete.js' %} "></script>
+
+<div class="counter">Unique page visits: {% show_counter request.path %}</div>
+
+<h1 id="label-title">{{ post.title }}</h1>
+<div class="main-description">
+    <section class="full-post">
+        <a href="{% url 'selected_blog' post.user.profile.nickname post.user_id %}">
+            Author - {{ post.user.profile.nickname }} -</a>
+        <a href="{% url 'selected_tag' post.tag %}">
+                    Tag - {{ post.tag }} -</a>
+        {{ post.content|linebreaks }}
+    </section>
+    <img class="author" src="{{ post.image.url }}" height="300px">
+</div>
+<div class="profile-action">
+    {% if user == post.user %}
+
+    <button class="b-action"><a href="{% url 'edit_post' post.slug %}">Edit</a></button>
+
+    <form onclick="confirm_delete()" action="{% url 'delete' post.id %}" method="POST">
+        {% csrf_token %}
+        <button class="b-action" onclick="confirm_delete(event)">Delete</button>
+    </form>
+</div>
+{% endif %}
+
+{% endblock %}

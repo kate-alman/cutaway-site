@@ -8,9 +8,9 @@
 <div class="counter">Unique page visits: {% show_counter request.path %}</div>
 <div class="blog-action">
     {% if request.user.is_authenticated %}
-    <button class="b-action"><a href="{% url 'new_post' %}">New post</a></button>
-    <button class="b-action"><a href="{% url 'selected_blog' user.profile.nickname user.pk %}">My blog</a></button>
-    <button class="b-action"><a href="{% url 'favorites' %}">Favorite blogs</a></button>
+    <button class="b-action" onclick="location.href='{% url 'new_post' %}'">New post</button>
+    <button class="b-action" onclick="location.href='{% url 'selected_blog' user.profile.nickname user.pk %}'">My blog</button>
+    <button class="b-action" onclick="location.href='{% url 'favorites' %}'">Favorite blogs</button>
     {% get_users user %}
     {% endif %}
 </div>

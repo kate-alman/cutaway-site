@@ -9,7 +9,6 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.views import (
     LoginView,
     PasswordChangeView,
-    PasswordResetDoneView,
 )
 from django.views import View
 from django.views.generic import CreateView, DeleteView, UpdateView
@@ -44,10 +43,6 @@ class LoginUser(WeatherMixin, LoginView):
 
     def get_success_url(self):
         return reverse_lazy("home")
-
-
-class ResetPasswordDoneView(PasswordResetDoneView):
-    success_url = reverse_lazy("login")
 
 
 class UserPasswordChangeView(SuccessMessageMixin, PasswordChangeView):

@@ -10,7 +10,7 @@ class ImagePreviewWidget(forms.widgets.FileInput):
         input_html = super().render(name, value, attrs=None, **kwargs)
         try:
             img_html = mark_safe(
-                f'<br><br>Current photo: <img src="{value.url}"/ height="100px">'
+                f'<br><br>Current photo: <img src="{value.url}"/ width="150px">'
             )
             return f"{input_html}{img_html}"
         except AttributeError:

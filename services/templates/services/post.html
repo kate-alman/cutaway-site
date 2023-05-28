@@ -9,19 +9,23 @@
 
 <h1 id="label-title">{{ post.title }}</h1>
 <div class="main-description">
-    <section class="full-post">
+    <div class="full-post">
+        {{ post.time_create }} |
+            {% if user.is_staff %}
+                admin-post
+            {% endif %}
         <a href="{% url 'selected_blog' post.user.profile.nickname post.user_id %}">
             Author - {{ post.user.profile.nickname }} -</a>
         <a href="{% url 'selected_tag' post.tag %}">
                     Tag - {{ post.tag }} -</a>
-        {{ post.content|linebreaks }}
-    </section>
-    <img class="author" src="{{ post.image.url }}" height="300px">
+        {{ post.content|escape|linebreaks|safe }}
+    </div>
+    <a href="{{ post.image.url }}" target="_blank"><img class="post-img" src="{{ post.image.url }}"></a>
 </div>
 <div class="profile-action">
     {% if user == post.user %}
 
-    <button class="b-action"><a href="{% url 'edit_post' post.slug %}">Edit</a></button>
+    <button class="b-action" onclick="location.href='{% url 'edit_post' post.slug %}'">Edit</button>
 
     <form onclick="confirm_delete()" action="{% url 'delete' post.id %}" method="POST">
         {% csrf_token %}

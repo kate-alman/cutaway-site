@@ -21,13 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# dotenv_path = os.path.join(BASE_DIR, '.env')
-# load_dotenv(dotenv_path)
+dotenv_path = os.path.join(BASE_DIR, '.env.test')
+load_dotenv(dotenv_path)
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(" ")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # INTERNAL_IPS = [
 #     "127.0.4.148",
@@ -37,17 +37,17 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(" ")
 
 INSTALLED_APPS = [
     # "debug_toolbar",
-    "main_body",
-    "accounts",
-    "services",
-    "rest_framework",
-    "project_api",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "main_body",
+    "accounts",
+    "services",
+    "rest_framework",
+    "project_api",
     "captcha",
     "drf_yasg",
 ]
@@ -99,7 +99,7 @@ DATABASES = {
         "NAME": os.getenv("POSTGRES_DB"),
         "USER": os.getenv("POSTGRES_USER"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST"),
+        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
         "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
@@ -128,7 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
@@ -215,3 +215,15 @@ CACHES = {
 CAPTCHA_FONT_SIZE = 25
 CAPTCHA_LENGTH = 5
 CAPTCHA_FOREGROUND_COLOR = "#a2725d"
+
+DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_HOST_USER")
+RECIPIENTS_EMAIL = [os.environ.get("EMAIL_HOST_USER")]
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
+
+SERVER_EMAIL = EMAIL_HOST_USER

@@ -22,7 +22,7 @@
             {% endif %}
             <div class="submit">
                 <button class="b-action" type="submit">LOG IN</button>
-                <button class="b-action" type="submit"><a href="{% url 'password_reset' %}">Forgot your account password?</a></button>
+                <button class="b-action" onclick="location.href='{% url 'password_reset' %}'">Forgot your account password?</button>
             </div>
         </form>
     </div>

@@ -2,6 +2,7 @@ import os
 import random
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpRequest, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -120,15 +121,17 @@ class TagsView(ListView):
     context_object_name = "tags"
 
     def get_queryset(self):
-        return Tag.objects.all()
+        return Tag.objects.filter(~Q(name="admin-update"))
 
 
 class NewPostView(LoginRequiredMixin, CreateView):
     form_class = NewPostForm
     template_name = "services/new_post.html"
 
-    @staticmethod
-    def get_tag(tag_info: str) -> str:
+    def get_tag(self, tag_info: str) -> str:
+        if self.request.user.is_staff and not tag_info:
+            tag, create = Tag.objects.get_or_create(name="admin-update")
+            return tag
         if tag_info.isdigit():
             tag, create = Tag.objects.get_or_create(id=tag_info)
         else:

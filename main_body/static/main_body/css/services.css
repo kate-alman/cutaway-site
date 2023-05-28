@@ -109,7 +109,7 @@ a.service-link {
     display: flex;
     flex-direction: column;
     width: 75%;
-    margin-left: 20px;
+    margin: 0 20px 0 20px;
 }
 h2.post-title {
     quotes: "\00ab" "\00bb";

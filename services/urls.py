@@ -29,12 +29,12 @@ urlpatterns = [
     ),
     path(
         "services/blog/<str:nickname>/<int:pk>/",
-        cache_page(60)(UserOrTagBlogView.as_view()),
+        UserOrTagBlogView.as_view(),
         name="selected_blog",
     ),
     path(
         "services/blog/<str:name>/",
-        cache_page(60)(UserOrTagBlogView.as_view()),
+        UserOrTagBlogView.as_view(),
         name="selected_tag",
     ),
     path("services/blog/<int:pk>/delete/", PostDeleteView.as_view(), name="delete"),

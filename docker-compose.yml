@@ -3,28 +3,26 @@ version: "3"
 services:
   web:
     build: ./
-    command: python manage.py runserver localhost:8000
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/code/
     ports:
       - "8000:8000"
     env_file:
-      - .env
+      - .env.test
     depends_on:
       - db
   db:
-    image: postgres:14.7-alpine
+    image: postgres:14-alpine
     env_file:
-      - .env
+      - .env.test
+
     volumes:
-      - ./postgresql/dumps:/code/dumps
       - ./postgresql/data:/var/lib/postgresql/data
     restart: always
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - "8080:8080"
 
 volumes:
   postgres_data:

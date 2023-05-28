@@ -2,13 +2,17 @@
 <div class="post">
     <div class="main-post">
         <h2 class="post-title"><q> {{ p.title }} </q></h2>
+        {{ p.time_create }} |
+        {% if user.is_staff %}
+        admin-post
+        {% endif %}
         <a href="{% url 'selected_blog' p.user.profile.nickname p.user_id %}">
             Author - {{ p.user.profile.nickname }} -</a>
         <a href="{% url 'selected_tag' p.tag %}">
                     Tag - {{ p.tag }} -</a>
         {% autoescape on %}
         {{ p.content|truncatewords:20 }}
-        <button class="link-read-post"><a href="{{ p.get_absolute_url }}">Read more</a></button>
+        <button class="b-action" onclick="location.href='{{ p.get_absolute_url }}'">Read more</button>
     </div>
     <div class="clear"></div>
     <div class="post-img-c">

@@ -7,17 +7,17 @@
 
 <section class="blog-action">
     {% if request.user.is_authenticated %}
-    <button class="b-action"><a href="{% url 'new_post' %}">New post</a></button>
-    <button class="b-action"><a href="{% url 'favorites' %}">Favorite blogs</a></button>
+    <button class="b-action" onclick="location.href='{% url 'new_post' %}'">New post</button>
+    <button class="b-action" onclick="location.href='{% url 'favorites' %}'">Favorite blogs</button>
     {% endif %}
     {% if user.is_authenticated and user.profile.nickname not in request.path %}
         {% if user_info.f_user in user.profile.favorites.all %}
-            <button class="b-action"><a href="add_favorite">Unfollow</a></button>
+            <button class="b-action" onclick="location.href='add_favorite'">Unfollow</button>
         {% else %}
-            <button class="b-action"><a href="add_favorite">Follow</a></button>
+            <button class="b-action" onclick="location.href='add_favorite'">Follow</button>
         {% endif %}
 
-    <button class="b-action"><a href="{% url 'selected_blog' user.profile.nickname user.pk %}">My blog</a></button>
+    <button class="b-action" onclick="location.href='{% url 'selected_blog' user.profile.nickname user.pk %}'">My blog</button>
         {% if user_info %}
         <button class="b-action">
             <details>

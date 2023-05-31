@@ -24,7 +24,7 @@
     {% endfor %}
     {% if request.user.is_authenticated %}
     <li class="lk"> Welcome
-        <a class="lk" href="{% url 'user_detail' user.username %}">{{ user.username }}</a> 🧡 |
+        <a class="lk" href="{% url 'user_detail' user.username %}">{{ user.username }}</a> |
         <a class="lk" href="{% url 'logout' %}">Logout</a></li>
     {% else %}
     <li class="lk"><a class="lk" href="{% url 'login' %}">Sign in</a> |

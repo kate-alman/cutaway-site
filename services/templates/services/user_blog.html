@@ -4,6 +4,7 @@
 {% load common_tags %}
 {% load static %}
 <script src="{% static 'main_body/js/select.js' %} "></script>
+<script src="{% static 'main_body/js/popup.js' %} "></script>
 
 <section class="blog-action">
     {% if request.user.is_authenticated %}
@@ -11,27 +12,30 @@
     <button class="b-action" onclick="location.href='{% url 'favorites' %}'">Favorite blogs</button>
     {% endif %}
     {% if user.is_authenticated and user.profile.nickname not in request.path %}
-        {% if user_info.f_user in user.profile.favorites.all %}
-            <button class="b-action" onclick="location.href='add_favorite'">Unfollow</button>
-        {% else %}
-            <button class="b-action" onclick="location.href='add_favorite'">Follow</button>
-        {% endif %}
+    {% if user_info.f_user in user.profile.favorites.all %}
+    <button class="b-action" onclick="location.href='add_favorite'">Unfollow</button>
+    {% else %}
+    <button class="b-action" onclick="location.href='add_favorite'">Follow</button>
+    {% endif %}
 
-    <button class="b-action" onclick="location.href='{% url 'selected_blog' user.profile.nickname user.pk %}'">My blog</button>
-        {% if user_info %}
-        <button class="b-action">
-            <details>
-                <summary>User info</summary>
-                <img src="{{ user_info.photo.url }}" height="100px">
-                <div class="inner-info">
-                    <u>Nickname:</u> {{ user_info.nickname }} <br>
-                    <u>Bio:</u> {{ user_info.bio }}<br>
-                    <u>Location:</u> {{ user_info.location }}<br>
-                    <u>Birth date:</u> {{ user_info.birth_date }}<br>
-                </div>
-            </details>
-        </button>
-        {% endif %}
+    <button class="b-action" onclick="location.href='{% url 'selected_blog' user.profile.nickname user.pk %}'">My blog
+    </button>
+    {% if user_info %}
+    <button class="b-action"><a href="javascript:PopUpShow()">User info</a>
+    </button>
+    <div class="out-popup" id="popup1">
+        <div class="inner-popup">
+            <a href="{{ user_info.photo.url }}" target="_blank"><img src="{{ user_info.photo.url }}" height="100px"></a>
+            <div class="inner-info">
+                <u>Nickname:</u> {{ user_info.nickname }} <br>
+                <u>Bio:</u> {{ user_info.bio }}<br>
+                <u>Location:</u> {{ user_info.location }}<br>
+                <u>Birth date:</u> {{ user_info.birth_date }}<br>
+            </div>
+            <button class="close" onclick="javascript:PopUpHide()">Hide</button>
+        </div>
+    </div>
+    {% endif %}
     {% get_users user %}
     {% endif %}
 </section>

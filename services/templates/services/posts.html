@@ -9,9 +9,10 @@
         <a href="{% url 'selected_blog' p.user.profile.nickname p.user_id %}">
             Author - {{ p.user.profile.nickname }} -</a>
         <a href="{% url 'selected_tag' p.tag %}">
-                    Tag - {{ p.tag }} -</a>
+            Tag - {{ p.tag }} -</a>
         {% autoescape on %}
         {{ p.content|truncatewords:20 }}
+        {% endautoescape %}
         <button class="b-action" onclick="location.href='{{ p.get_absolute_url }}'">Read more</button>
     </div>
     <div class="clear"></div>
@@ -19,6 +20,6 @@
         <img class="post-img" src="{{ p.image.url }}" alt="poster">
     </div>
 </div>
-{% endautoescape %}
+
 
 {% endfor %}

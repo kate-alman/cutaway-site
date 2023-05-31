@@ -11,14 +11,16 @@
 <div class="main-description">
     <div class="full-post">
         {{ post.time_create }} |
-            {% if user.is_staff %}
-                admin-post
-            {% endif %}
+        {% if user.is_staff %}
+        admin-post
+        {% endif %}
         <a href="{% url 'selected_blog' post.user.profile.nickname post.user_id %}">
             Author - {{ post.user.profile.nickname }} -</a>
         <a href="{% url 'selected_tag' post.tag %}">
-                    Tag - {{ post.tag }} -</a>
+            Tag - {{ post.tag }} -</a>
+        {% autoescape on %}
         {{ post.content|escape|linebreaks|safe }}
+        {% endautoescape %}
     </div>
     <a href="{{ post.image.url }}" target="_blank"><img class="post-img" src="{{ post.image.url }}"></a>
 </div>

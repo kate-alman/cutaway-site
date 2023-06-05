@@ -6,11 +6,13 @@
 <script src="{% static 'main_body/js/select.js' %} "></script>
 <script src="{% static 'main_body/js/numbers.js' %}"></script>
 
+
+<script src="https://malsup.github.io/jquery.form.js"></script>
+
 <div class="container">
     <div class="select-film">
         <p class="select-description">Мини-помощник для выбора фильма.<br>
             Просто выберите необходимые параметры или доверьтесь абсолютному случаю.</p><br>
-
         <form method="post" id="selectize-form">
             {% csrf_token %}
 
@@ -20,59 +22,76 @@
             {% endfor %}
 
             <select class="js-chosen" name="genres" id="genre-select">
+                {% if not genre %}
                 <option value="">--- Please choose a genre ---</option>
-                <option value="24">Аниме</option>
-                <option value="8">Биография</option>
-                <option value="11">Боевик</option>
-                <option value="10">Вестерн</option>
-                <option value="14">Военный</option>
-                <option value="5">Детектив</option>
-                <option value="33">Детский</option>
-                <option value="28">Для взрослых</option>
-                <option value="22">Документальный</option>
-                <option value="2">Драма</option>
-                <option value="31">Игра</option>
-                <option value="15">История</option>
-                <option value="13">Комедия</option>
-                <option value="27">Концерт</option>
-                <option value="23">Короткометражка</option>
-                <option value="3">Криминал</option>
-                <option value="4">Мелодрама</option>
-                <option value="16">Музыка</option>
-                <option value="18">Мультфильм</option>
-                <option value="20">Мюзикл</option>
-                <option value="26">Новости</option>
-                <option value="7">Приключения</option>
-                <option value="19">Семейный</option>
-                <option value="21">Спорт</option>
-                <option value="32">Ток-шоу</option>
-                <option value="1">Триллер</option>
-                <option value="17">Ужасы</option>
-                <option value="6">Фантастика</option>
-                <option value="9">Фильм-нуар</option>
-                <option value="12">Фэнтези</option>
-                <option value="29">Церемония</option>
+                {% else %}
+                <option selected="{{ genre_id }}" value="{{ genre_id }} {{ genre }}">{{ genre }}</option>
+                {% endif %}
+
+                <option value="24 Аниме">Аниме</option>
+                <option value="8 Биография">Биография</option>
+                <option value="11 Боевик">Боевик</option>
+                <option value="10 Вестерн">Вестерн</option>
+                <option value="14 Военный">Военный</option>
+                <option value="5 Детектив">Детектив</option>
+                <option value="33 Детский">Детский</option>
+                <option value="28 Для взрослых">Для взрослых</option>
+                <option value="22 Документальный">Документальный</option>
+                <option value="2 Драма">Драма</option>
+                <option value="31 Игра">Игра</option>
+                <option value="15 История">История</option>
+                <option value="13 Комедия">Комедия</option>
+                <option value="27 Концерт">Концерт</option>
+                <option value="23 Короткометражка">Короткометражка</option>
+                <option value="3 Криминал">Криминал</option>
+                <option value="4 Мелодрама">Мелодрама</option>
+                <option value="16 Музыка">Музыка</option>
+                <option value="18 Мультфильм">Мультфильм</option>
+                <option value="20 Мюзикл">Мюзикл</option>
+                <option value="26 Новости">Новости</option>
+                <option value="7 Приключения">Приключения</option>
+                <option value="19 Семейный">Семейный</option>
+                <option value="21 Спорт">Спорт</option>
+                <option value="32 Ток-шоу">Ток-шоу</option>
+                <option value="1 Триллер">Триллер</option>
+                <option value="17 Ужасы">Ужасы</option>
+                <option value="6 Фантастика">Фантастика</option>
+                <option value="9 Фильм-нуар">Фильм-нуар</option>
+                <option value="12 Фэнтези">Фэнтези</option>
+                <option value="29 Церемония">Церемония</option>
             </select>
 
             <select name="year" id="year_select">
+                {% if not old_year %}
                 <option value="">--- Please choose an year (from) ---</option>
-                <script>
-            setNumbers('year_select', '1920', '2023');
-                </script>
+                {% endif %}
+                {% for year in range_years %}
+                    {% if year == old_year %}
+                    <option selected="{{ old_year }}" value="{{ old_year }}">{{ old_year }}</option>
+                    {% else %}
+                    <option value="{{ year }}">{{ year }}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
 
             <select name="rating" id="rating_select">
+                {% if not rating %}
                 <option value="">--- Please choose a rating (from) ---</option>
-                <script>
-            setNumbers('rating_select', '1', '10');
-                </script>
+                {% endif %}
+                {% for mark in range_rate %}
+                    {% if rating and mark == rating %}
+                    <option selected="{{ rating }}" value="{{ rating }}">{{ rating }}</option>
+                    {% else %}
+                    <option value="{{ mark }}">{{ mark }}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
 
             <button class="btn-film" type="submit">Select</button>
         </form>
     </div>
 
-    <div class="film">
+    <div class="film" id="film">
         <img class="img-film" src="{{ film.posterUrl }}" alt="poster" width="1000px">
         <div class="description">
             Название: {{ film.title }}<br>

@@ -76,7 +76,8 @@ class RandomFilm(View):
         film = self.get_random_film(
             random.randint(1920, 2023), random.randint(1, 10), random.randint(1, 10)
         )
-        return render(request, "services/random_film.html", {"film": film})
+        return render(request, "services/random_film.html",
+                      {"film": film, "range_years": [*range(1920, 2025)][::-1], "range_rate": [*range(1, 11)][::-1]})
 
     def post(self, request, *args, **kwargs):
         year = (
@@ -88,12 +89,20 @@ class RandomFilm(View):
             request.POST.getlist("rating")[0] if request.POST.getlist("rating") else 1
         )
         genre = (
-            request.POST.getlist("genres")[0]
+            request.POST.get("genres").split()[0]
             if request.POST.getlist("genres")
             else random.randint(1, 10)
         )
         film = self.get_random_film(year, rate, genre)
-        return render(request, "services/random_film.html", {"film": film})
+        return render(request, "services/random_film.html",
+                      {"film": film,
+                       "genre": " ".join([f"{word}" for word in request.POST.get("genres").split()[1:]]),
+                       "genre_id": request.POST.get("genres").split()[0],
+                       "old_year": int(request.POST.get("year")),
+                       "rating": int(request.POST.get("rating")),
+                       "range_rate": [*range(1, 11)][::-1],
+                       "range_years": [*range(1920, 2025)][::-1],
+                       })
 
 
 class BlogView(PostMixin, ListView):

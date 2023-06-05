@@ -10,8 +10,14 @@ from django.views import View
 from django.views.generic import ListView
 
 from main_body.forms import FeedbackForm
-from mino_project.settings import EMAIL_HOST_USER, DEFAULT_FROM_EMAIL, EMAIL_HOST_PASSWORD, RECIPIENTS_EMAIL, \
-    EMAIL_HOST, EMAIL_PORT
+from mino_project.settings import (
+    EMAIL_HOST_USER,
+    DEFAULT_FROM_EMAIL,
+    EMAIL_HOST_PASSWORD,
+    RECIPIENTS_EMAIL,
+    EMAIL_HOST,
+    EMAIL_PORT,
+)
 from services.models import News
 from main_body.utils import WeatherMixin
 
@@ -39,7 +45,9 @@ class FeedbackView(LoginRequiredMixin, View):
 
     def post(self, *args, **kwargs):
         msg = EmailMessage()
-        msg.set_content(f"{self.request.POST.get('email')}\n{self.request.POST.get('content')}")
+        msg.set_content(
+            f"{self.request.POST.get('email')}\n{self.request.POST.get('content')}"
+        )
         msg["Subject"] = self.request.POST.get("title")
         msg["From"] = DEFAULT_FROM_EMAIL
         msg["To"] = DEFAULT_FROM_EMAIL

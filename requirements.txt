@@ -1,4 +1,9 @@
+aiohttp==3.8.4
+aio_pika==9.0.5
+
 black==23.1.0
+bson==0.5.10
+
 Django==4.1.6
 django-autoslug==1.9.9
 django-debug-toolbar==4.0.0
@@ -16,8 +21,13 @@ djoser==2.2.0
 drf-yasg==1.21.5
 drf-yasg-json-api==0.9.1
 geopy==2.3.0
+marshmallow==3.19.0
+marshmallow_dataclass==8.5.14
+
 psycopg2==2.9.2
 psycopg2-binary==2.9.5
 pytest==7.2.1
 pytest-django==4.5.2
 python-dotenv==1.0.0
+
+SQLAlchemy==1.4.40

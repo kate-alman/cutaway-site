@@ -1,7 +1,7 @@
 from django.utils.decorators import method_decorator
 from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from drf_yasg.utils import swagger_auto_schema
 
@@ -53,6 +53,12 @@ class NewsAPIList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    def filter_queryset(self, queryset):
+        amount = self.request.GET.get("amount")
+        if amount:
+            return News.objects.select_related("user__profile", "tag").all()[:int(amount)]
+        return News.objects.select_related("user__profile", "tag").all()
+
 
 @method_decorator(
     name="get", decorator=swagger_auto_schema(operation_description="Get post by id")
@@ -74,7 +80,7 @@ class NewsAPIList(generics.ListCreateAPIView):
     decorator=swagger_auto_schema(operation_description="Delete post by id"),
 )
 class PostAPIUpdate(generics.RetrieveUpdateDestroyAPIView):
-    queryset = News.objects.select_related("user__profile").select_related("tag").all()
+    queryset = News.objects.select_related("user__profile", "tag").all()
     serializer_class = NewsSerializer
     permission_classes = (IsOwnerOrReadOnly,)
 
@@ -90,8 +96,7 @@ class UserPostsAPIList(generics.ListAPIView):
 
     def get_queryset(self):
         return (
-            News.objects.select_related("user__profile")
-            .select_related("tag")
+            News.objects.select_related("user__profile", "tag")
             .filter(user_id=self.kwargs.get("pk", 1))
         )
 

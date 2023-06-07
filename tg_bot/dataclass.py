@@ -14,9 +14,9 @@ class MainData:
 @dataclass
 class MessageFrom(MainData):
     id: int
-    first_name: str
+    first_name: Optional[str]
     last_name: Optional[str]
-    username: str
+    username: Optional[str]
 
 
 @dataclass
@@ -100,5 +100,5 @@ class PostSchema(Schema):
             f"Автор: {post.get('user')}\n"
             f"Название: {post.get('title')}\n"
             f"Содержание: {post.get('content')}\n"
-            f"Ссылка: https://alman-project.ru/{post.get('slug')}\n"
+            f"Ссылка: https://alman-project.ru/post/{post.get('slug')}\n"
         )

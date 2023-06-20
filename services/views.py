@@ -60,6 +60,8 @@ class RandomFilm(View):
                 "posterUrl": response["items"][0]["posterUrlPreview"],
                 "url": f'https://www.kinopoisk.ru/film/{response["items"][0]["kinopoiskId"]}/',
             }
+            if film["title"]:
+                raise KeyError
         except (KeyError, IndexError):
             film = {
                 "title": TITLE_REPLACE,
@@ -82,24 +84,25 @@ class RandomFilm(View):
     def post(self, request, *args, **kwargs):
         year = (
             request.POST.getlist("year")[0]
-            if request.POST.getlist("year")[0]
+            if request.POST.getlist("year") != [""]
             else random.randint(1920, 2023)
         )
         rate = (
-            request.POST.getlist("rating")[0] if request.POST.getlist("rating") else 1
+            request.POST.getlist("rating")[0] if request.POST.getlist("rating") != [""] else 1
         )
         genre = (
-            request.POST.get("genres").split()[0]
-            if request.POST.getlist("genres")
-            else random.randint(1, 10)
+            request.POST.getlist("genres")[0]
+            if request.POST.getlist("genres") != [""]
+            else random.randint(1, 32)
         )
         film = self.get_random_film(year, rate, genre)
         return render(request, "services/random_film.html",
                       {"film": film,
                        "genre": " ".join([f"{word}" for word in request.POST.get("genres").split()[1:]]),
-                       "genre_id": request.POST.get("genres").split()[0],
-                       "old_year": int(request.POST.get("year")),
-                       "rating": int(request.POST.get("rating")),
+                       "genre_id": random.randint(1920, 2023)
+                            if not genre else genre if isinstance(genre, int) else genre[0],
+                       "old_year": None if not request.POST.get("year") else int(request.POST.get("year")),
+                       "rating": None if not request.POST.get("rating") else int(request.POST.get("rating")),
                        "range_rate": [*range(1, 11)][::-1],
                        "range_years": [*range(1920, 2025)][::-1],
                        })

@@ -33,7 +33,7 @@ schema_view = get_schema_view(
         contact=openapi.Contact(email="ekaterina.aman@syandex.ru"),
     ),
     public=True,
-    permission_classes=[permissions.IsAuthenticated],
+    permission_classes=[permissions.IsAuthenticatedOrReadOnly],
     generator_class=CustomOpenAPISchemaGenerator,
 )
 

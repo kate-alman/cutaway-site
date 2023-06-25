@@ -3,6 +3,7 @@ import logging
 
 
 def run(start_tasks: list[asyncio.coroutines], stop_tasks: list[asyncio.coroutines]) -> None:
+    """Runs bot services recurrently in a loop."""
     try:
         loop = asyncio.get_running_loop()
     except RuntimeError:

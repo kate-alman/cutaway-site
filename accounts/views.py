@@ -46,18 +46,21 @@ class LoginUser(WeatherMixin, LoginView):
 
 
 class UserPasswordChangeView(SuccessMessageMixin, PasswordChangeView):
+    """View for updating the user password in the personal account."""
     form_class = UserPasswordChangeForm
     template_name = "accounts/password_change_form.html"
 
     def form_valid(self, form):
         if form.is_valid():
             form.save()
+        # when changing the password, it displays a JS alert and makes a redirect
         resp_body = '<script>alert("Password changed");\
                                 window.location="%s"</script>'
         return HttpResponse(resp_body % reverse_lazy("login"))
 
 
 class UserDeleteView(LoginRequiredMixin, DeleteView):
+    """View for deleting the user and his profile in the personal account."""
     model = User
     success_url = reverse_lazy("home")
 
@@ -68,6 +71,7 @@ def logout_user(request):
 
 
 class UserProfileView(LoginRequiredMixin, UserMixin, View):
+    """View self profile and manage self account."""
     model = Profile
     template_name = "accounts/user_profile.html"
     success_url = reverse_lazy("home")
@@ -75,6 +79,7 @@ class UserProfileView(LoginRequiredMixin, UserMixin, View):
 
     def get(self, request: HttpRequest, **kwargs):
         user = get_object_or_404(User, username=self.kwargs.get("username"))
+        # checks that the user is trying to access his personal account, otherwise returns 404
         if self.request.user.username == user.username:
             kwargs = kwargs | {"pk": user.pk, "self_profile": True}
             user_info = self.get_user_context(**kwargs)
@@ -84,6 +89,7 @@ class UserProfileView(LoginRequiredMixin, UserMixin, View):
 
 
 class UpdateUserProfile(LoginRequiredMixin, UpdateView):
+    """View for updating the user profile in the personal account."""
     model = Profile
     form_class = UpdateProfileForm
     template_name = "accounts/change_user_info.html"
@@ -94,6 +100,7 @@ class UpdateUserProfile(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         form.save()
+        # when changing the profile, it displays a JS alert and makes a redirect
         resp_body = '<script>alert("Profile changed");\
                                                      window.location="%s"</script>'
         slug = self.kwargs.get("slug", None)

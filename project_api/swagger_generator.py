@@ -2,6 +2,7 @@ from drf_yasg.generators import OpenAPISchemaGenerator
 
 
 class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
+    """General description of available methods."""
     def get_schema(self, request=None, public=False):
         swagger = super().get_schema(request, public)
         swagger.tags = [

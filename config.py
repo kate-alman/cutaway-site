@@ -35,7 +35,7 @@ class Config:
 
 
 BASE_DIR = Path(__file__).resolve().parent
-dotenv_file = os.path.join(BASE_DIR, ".env")
+dotenv_file = os.path.join(BASE_DIR, ".env.test")
 if os.path.isfile(dotenv_file):
     load_dotenv(dotenv_file)
 

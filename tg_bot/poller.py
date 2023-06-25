@@ -11,6 +11,7 @@ from tg_bot.rabbitMQ import RabbitMQ
 
 
 class Poller:
+    """A class that (if running) constantly checks for new messages from the bot."""
     def __init__(self, cfg: Config, timeout: int = 20):
         self.logger = logging.getLogger("tg_poller")
         logging.basicConfig(level=logging.INFO)

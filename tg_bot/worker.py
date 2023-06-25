@@ -15,6 +15,7 @@ from tg_bot.rabbitMQ import RabbitMQ
 
 
 class BotWorker:
+    """Class for handling incoming updates."""
     def __init__(self, cfg: Config):
         self.rabbitMQ = RabbitMQ(
             host=cfg.rabbitmq.host,
@@ -45,9 +46,7 @@ class BotWorker:
         await self.rabbitMQ.disconnect()
 
     async def _worker_rabbit(self) -> None:
-        """
-        Метод для прослушивания событий RabbitMQ.
-        """
+        """Method for listening to RabbitMQ events."""
         await self.rabbitMQ.listen_events(
             on_message_func=self.on_message,
             routing_key=[self.routing_key_worker, self.routing_key_poller],
@@ -56,12 +55,14 @@ class BotWorker:
 
     async def on_message(self, message: IncomingMessage) -> None:
         if message.routing_key == "tg_poller":
+            # if this is a new update, then it is transferred to processing
             update: UpdateObject = UpdateObject.Schema().load(bson.loads(message.body))
             if update.message:
                 await self._handler(message)
             elif update.callback_query:
                 await self.handle_callback_query(update)
         elif message.routing_key == self.routing_key_worker:
+            # if it is already a processed update, then it is transferred to the queue for sending
             text = bson.loads(message.body)
             match text["type_"]:
                 case "wanna_post":
@@ -99,6 +100,7 @@ class BotWorker:
         await message.ack()
 
     async def _handler(self, upd: IncomingMessage) -> None:
+        """Processes incoming updates and transfers them to a specific queue depending on the content."""
         update: UpdateObject = UpdateObject.Schema().load(bson.loads(upd.body))
         match update.message.text.split()[-1]:
             case "/start":
@@ -149,6 +151,7 @@ class BotWorker:
                 )
 
     async def handle_callback_query(self, update: UpdateObject) -> None:
+        """Handles a user clicking on an inline keyboard button."""
         match update.callback_query.data:
             case str() as char if char[1:].isdigit():
                 await self.rabbitMQ.send_event(
@@ -172,6 +175,7 @@ class BotWorker:
 
     @staticmethod
     async def get_posts(count: int) -> str:
+        """Fetches posts via site api and returns them as a string."""
         resp = requests.get(
             f"https://alman-project.ru/api/v1/posts/", params={"amount": count}
         )

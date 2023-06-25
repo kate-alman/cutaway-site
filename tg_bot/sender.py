@@ -13,6 +13,7 @@ from tg_bot.client import TgClient
 
 
 class TgSender:
+    """A class that (if running) sends messages processed by the worker to the user in the chat."""
     def __init__(self, cfg: Config):
         self.workers = 10
         self.tg_client = TgClient(cfg=cfg)
@@ -30,7 +31,7 @@ class TgSender:
         self.logger = logging.getLogger("sender")
 
     async def on_message(self, message: IncomingMessage) -> None:
-        """Передает сообщения в обработку"""
+        """Passes messages for processing."""
         update = bson.loads(message.body)
         await self.handle_update(update)
         await message.ack()
@@ -47,7 +48,7 @@ class TgSender:
         await self.rabbitMQ.disconnect()
 
     async def _worker_rabbit(self) -> None:
-        """Получает сообщений из очереди"""
+        """Receives messages from the queue."""
         await self.rabbitMQ.listen_events(
             on_message_func=self.on_message,
             queue_name=self.queue_name,
@@ -55,6 +56,7 @@ class TgSender:
         )
 
     async def handle_update(self, update: dict) -> None:
+        """Depending on the type of update, sends a message to the user and the keyboard if necessary."""
         match update["type_"]:
             case "message":
                 await self.tg_client.send_message(

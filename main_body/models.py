@@ -29,11 +29,12 @@ class Menu(models.Model):
         **kwargs,
     ) -> None:
         super().save(*args, **kwargs)
-        if self.parent:
+        if self.parent:  # the new menu item is a sub item
             self.set_relation()
         return
 
     def set_relation(self) -> None:
+        """Establishes a relationship between a menu item and its sub-items."""
         relations_of_parent = MenuRelation.objects.filter(
             from_parent=self.parent
         ).values_list("to_child_id")
@@ -45,6 +46,7 @@ class Menu(models.Model):
 
 
 class MenuRelation(models.Model):
+    """Stores the relationship of menu items and their sub-items."""
     to_child = models.ForeignKey(
         "Menu", on_delete=models.CASCADE, related_name="relations_with_parent"
     )

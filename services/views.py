@@ -32,11 +32,13 @@ class ListServicesPageView(View):
 
 
 class RandomFilm(View):
+    """View for film choice."""
     API_KEY_KP = os.environ.get("API_KEY_KP")
     BASE_URL_KP = os.environ.get("BASE_URL_KP")
     extra_context = {"title": "Random film"}
 
     def get_random_film(self, year, rate, genre):
+        """Receives a movie using the api according to the specified parameters."""
         try:
             URL = (
                 f"{self.BASE_URL_KP}?genres={genre}&order=RATING&type=ALL&ratingFrom={rate}&"
@@ -75,6 +77,7 @@ class RandomFilm(View):
         return film
 
     def get(self, request, *args, **kwargs):
+        """Returns a random movie on a get request."""
         film = self.get_random_film(
             random.randint(1920, 2023), random.randint(1, 10), random.randint(1, 10)
         )
@@ -82,6 +85,7 @@ class RandomFilm(View):
                       {"film": film, "range_years": [*range(1920, 2025)][::-1], "range_rate": [*range(1, 11)][::-1]})
 
     def post(self, request, *args, **kwargs):
+        """Returns a random movie according to the specified parameters."""
         year = (
             request.POST.getlist("year")[0]
             if request.POST.getlist("year") != [""]
@@ -109,6 +113,7 @@ class RandomFilm(View):
 
 
 class BlogView(PostMixin, ListView):
+    """View for blog page."""
     model = News
     template_name = "services/blog.html"
     context_object_name = "posts"
@@ -119,6 +124,7 @@ class BlogView(PostMixin, ListView):
 
 
 class ShowPost(DetailView):
+    """View for post page."""
     model = News
     template_name = "services/post.html"
     slug_url_kwarg = "post_slug"
@@ -129,6 +135,7 @@ class ShowPost(DetailView):
 
 
 class TagsView(ListView):
+    """View for displaying tags when creating a post."""
     model = Tag
     context_object_name = "tags"
 
@@ -137,10 +144,13 @@ class TagsView(ListView):
 
 
 class NewPostView(LoginRequiredMixin, CreateView):
+    """View for creating a post."""
     form_class = NewPostForm
     template_name = "services/new_post.html"
 
     def get_tag(self, tag_info: str) -> str:
+        """Checks if the tag exists, if not, it creates it.
+        If the tag is not specified, then the default tag is used (main)."""
         if self.request.user.is_staff and not tag_info:
             tag, create = Tag.objects.get_or_create(name="admin-update")
             return tag
@@ -167,14 +177,16 @@ class NewPostView(LoginRequiredMixin, CreateView):
 
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
+    """View for updating a post."""
     model = News
     template_name = "services/edit_post.html"
     form_class = UpdatePostForm
     context_object_name = "post"
 
     def get(self, request: HttpRequest, **kwargs):
+        # gets a post from the db by slug, otherwise returns 404
         post = get_object_or_404(News, slug=self.kwargs.get("slug"))
-        if self.request.user.pk == post.user_id:
+        if self.request.user.pk == post.user_id:  # checks if the user is the author of the post
             return super().get(request, **kwargs)
         else:
             raise Http404()
@@ -188,11 +200,13 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):
+    """View for deleting post."""
     model = News
     success_url = reverse_lazy("blog")
 
 
 class UserOrTagBlogView(PostMixin, UserMixin, ListView):
+    """View for viewing posts by author or tag."""
     model = News
     template_name = "services/user_blog.html"
     context_object_name = "posts"
@@ -203,6 +217,7 @@ class UserOrTagBlogView(PostMixin, UserMixin, ListView):
         return dict(list(context.items()) + list(user_info.items()))
 
     def get_queryset(self):
+        """Returns posts by tag or author, depending on the specified parameter."""
         tag_name = self.kwargs.get("name")
         user_id = self.kwargs.get("pk")
         if tag_name:
@@ -221,6 +236,7 @@ class UserOrTagBlogView(PostMixin, UserMixin, ListView):
 
 
 class FavoritePosts(PostMixin, ListView):
+    """View for viewing posts by favorite authors."""
     model = News
     template_name = "services/favorite_posts.html"
     context_object_name = "posts"
@@ -238,6 +254,7 @@ class FavoritePosts(PostMixin, ListView):
 
 
 class AddRemoveFavorite(View):
+    """Add or remove an author from favorites."""
     def get(self, request, *args, **kwargs):
         profile = Profile.objects.get(user__id=kwargs["pk"])
         if not self.request.user.profile.add_relationship(profile):

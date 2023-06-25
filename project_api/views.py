@@ -54,6 +54,11 @@ class NewsAPIList(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
     def filter_queryset(self, queryset):
+        """
+        If the amount parameter is passed to the queryset,
+        then it returns the number of posts equal to amount or all
+        if the amount is greater than the total number of posts.
+        """
         amount = self.request.GET.get("amount")
         if amount:
             return News.objects.select_related("user__profile", "tag").all()[:int(amount)]
@@ -95,6 +100,7 @@ class UserPostsAPIList(generics.ListAPIView):
     pagination_class = APIListPagination
 
     def get_queryset(self):
+        """Returns the posts of the specified user."""
         return (
             News.objects.select_related("user__profile", "tag")
             .filter(user_id=self.kwargs.get("pk", 1))

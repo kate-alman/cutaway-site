@@ -23,6 +23,7 @@ from main_body.utils import WeatherMixin
 
 
 class MainPageView(WeatherMixin, View):
+    """View for main page."""
     template_name = "main_body/main_page.html"
     extra_context = {"title": "Main Page"}
 
@@ -35,15 +36,18 @@ class MainPageView(WeatherMixin, View):
 
 
 class AboutPageView(ListView):
+    """View for about page."""
     template_name = "main_body/about.html"
     queryset = News.objects.all().select_related("user")
 
 
 class FeedbackView(LoginRequiredMixin, View):
+    """View for feedback page."""
     def get(self, request):
         return render(request, "main_body/feedback.html", {"form": FeedbackForm})
 
     def post(self, *args, **kwargs):
+        """Receives data from the feedback form and sends it via smtp to the email (specified in settings.py)."""
         msg = EmailMessage()
         msg.set_content(
             f"{self.request.POST.get('email')}\n{self.request.POST.get('content')}"
@@ -60,19 +64,22 @@ class FeedbackView(LoginRequiredMixin, View):
 
 
 class PayView(View):
+    """View for pay page."""
     def get(self, request):
         return render(request, "main_body/pay.html")
 
 
 class PayFailView(View):
+    """View for failed payment page."""
     def get(self, request):
         return render(request, "main_body/fail.html")
 
 
 class PaySuccessView(View):
+    """View for successful payment page."""
     def get(self, request):
         return render(request, "main_body/success.html")
 
 
 def page_not_found(request, exception):
-    return HttpResponseNotFound("<h1>Страница не найдена</h1>")
+    return HttpResponseNotFound("<h1>Page not found</h1>")

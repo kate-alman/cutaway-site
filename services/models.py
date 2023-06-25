@@ -36,23 +36,28 @@ class News(models.Model):
         return reverse("post", kwargs={"post_slug": self.slug})
 
     def validate_slug(self) -> None:
+        """Checks that the new link is unique or changes it."""
         symbols = string.ascii_letters + "".join(map(str, range(0, 10)))
         already_exist = News.objects.filter(slug=self.slug).last()
-        self.slug = (
-            self.slug
-            if not already_exist
-            else (
-                self.slug + random.choice(symbols)
-                if self.slug == already_exist.slug
-                else self.slug
+        # if the new reference is not unique, then changes it
+        while already_exist:
+            self.slug = (
+                self.slug
+                if not already_exist
+                else (
+                    self.slug + "".join(random.choice(symbols) for _ in range(10))
+                    if self.slug == already_exist.slug
+                    else self.slug
+                )
             )
-        )
+            already_exist = News.objects.filter(slug=self.slug).last()
 
     def save(self, *args, **kwargs):
         if self.pk:
             new_post, create = News.objects.get_or_create(pk=self.pk)
         else:
             value = self.title
+            # creates a link for a new post
             self.slug = slugify(
                 value.translate(
                     str.maketrans(
@@ -61,6 +66,7 @@ class News(models.Model):
                     )
                 )
             )
+            # checks that the new link is unique
             self.validate_slug()
         super().save(*args, **kwargs)
 

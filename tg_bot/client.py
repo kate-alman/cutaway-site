@@ -18,6 +18,7 @@ class TgClient:
         return f"{self.BASE_URL}{self.token}/{method}"
 
     async def get_updates(self, offset: Optional[int] = None, timeout: int = 0) -> dict:
+        """Receives updates (new messages) from telegram."""
         url = self.get_method_url("getUpdates")
         params = {}
         if offset:
@@ -31,6 +32,7 @@ class TgClient:
     async def get_update_objects(
         self, offset: Optional[int] = None, timeout: int = 0
     ) -> GetUpdatesResponse:
+        """Deserialize updates."""
         updates = await self.get_updates(offset=offset, timeout=timeout)
         try:
             if updates.get("result"):
@@ -42,6 +44,7 @@ class TgClient:
     async def send_message(
         self, chat_id: int, text: str, force_reply: bool = False
     ) -> SendMessageResponse:
+        """Method to send message to user."""
         url = self.get_method_url("sendMessage")
         payload = {
             "chat_id": chat_id,
@@ -56,6 +59,7 @@ class TgClient:
     async def send_keyboard(
         self, chat_id: int, text: str = "Click", keyboard: Optional[dict] = None
     ) -> SendMessageResponse:
+        """Method to send keyboard to user."""
         url = self.get_method_url("sendMessage")
         payload = {"chat_id": chat_id, "text": text, "reply_markup": keyboard}
         async with aiohttp.ClientSession() as session:
@@ -66,6 +70,7 @@ class TgClient:
     async def remove_inline_keyboard(
         self, message_id: int, chat_id: int
     ) -> SendMessageResponse:
+        """Method to remove keyboard from user."""
         url = self.get_method_url("editMessageReplyMarkup")
         payload = {
             "chat_id": chat_id,

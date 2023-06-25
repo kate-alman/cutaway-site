@@ -59,6 +59,7 @@ class LoginUserForm(AuthenticationForm):
 
 
 class UpdateProfileForm(forms.ModelForm):
+    """Updating the user profile in the personal account."""
     photo = forms.ImageField(
         widget=ImagePreviewWidget, validators=[check_max_file_size]
     )
@@ -75,6 +76,7 @@ class UpdateProfileForm(forms.ModelForm):
 
 
 class UserPasswordChangeForm(SetPasswordForm):
+    """Updating the user password in the personal account."""
     captcha = CaptchaField(label="Are you human?")
     new_password1 = forms.CharField(
         label="New password",

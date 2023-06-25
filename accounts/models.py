@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-User._meta.get_field("email")._unique = True
+User._meta.get_field("email")._unique = True   # when registering a new user, it monitors the uniqueness of mail
 
 
 class Profile(models.Model):
@@ -40,6 +40,7 @@ class Profile(models.Model):
 
 
 class FavoriteRelationship(models.Model):
+    """Many-to-many relationship to store blog user subscriptions."""
     from_user = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="from_people"
     )
@@ -53,6 +54,7 @@ class FavoriteRelationship(models.Model):
 
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
+    """Automatically creates a profile when a new user is created."""
     if created:
         Profile.objects.create(user=instance, nickname=instance.username)
     instance.profile.save()

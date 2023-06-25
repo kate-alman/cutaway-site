@@ -13,6 +13,7 @@ register = template.Library()
 
 @register.inclusion_tag("main_body/menu.html", takes_context=True)
 def show_top_menu(context: RequestContext, selected: str) -> RequestContext:
+    """Draws a menu on the page and shows a submenu if present."""
     menu_items = list(Menu.objects.select_related("parent").all())
     have_child: dict = {}
     for item in menu_items.copy():
@@ -29,11 +30,13 @@ def show_top_menu(context: RequestContext, selected: str) -> RequestContext:
 
 @register.simple_tag(name="get_child")
 def get_child(child_list: dict, parent: str) -> list[Menu]:
+    """Returns all submenus of a menu item."""
     return child_list[parent]
 
 
 @register.inclusion_tag("services/users_list.html", takes_context=True)
 def get_users(context: RequestContext, user: User) -> RequestContext:
+    """Adds to the context all users except the current one."""
     context["users"] = Profile.objects.filter(~Q(user_id=user.pk)).select_related(
         "user"
     )
@@ -42,6 +45,7 @@ def get_users(context: RequestContext, user: User) -> RequestContext:
 
 @register.inclusion_tag("services/posts.html", takes_context=True)
 def show_posts(context: RequestContext, **kwargs) -> RequestContext:
+    """Shows posts on blog page, author blog, tag, favorite blogs."""
     staff = kwargs.get("staff")
     if staff:
         context["posts"] = News.objects.filter(user__is_staff=staff)
@@ -50,5 +54,6 @@ def show_posts(context: RequestContext, **kwargs) -> RequestContext:
 
 @register.simple_tag
 def show_counter(url: str) -> int:
+    """Gets from the db and returns the number of visits to the given page."""
     page = PageVisits.objects.get(url=url)
     return page.count

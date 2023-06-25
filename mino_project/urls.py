@@ -24,6 +24,8 @@ from main_body.views import page_not_found
 from mino_project import settings
 from project_api.swagger_generator import CustomOpenAPISchemaGenerator
 
+
+# sets the parameters for the swagger
 schema_view = get_schema_view(
     openapi.Info(
         title="Alman Project API",

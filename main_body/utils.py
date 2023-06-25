@@ -8,6 +8,7 @@ from main_body.models import Weather
 
 
 class WeatherMixin:
+    """Receives weather data by IP and adds the received data to the context."""
     API_KEY = os.environ.get("API_KEY")
     BASE_URL = os.environ.get("BASE_URL")
     API_KEY_IP = os.environ.get("API_KEY_IP")
@@ -15,12 +16,14 @@ class WeatherMixin:
     PRIVATE_IPS_PREFIX = ("10.", "172.", "192.", "127.")
 
     def get_user_context(self, request: HttpRequest, **kwargs) -> dict:
+        """Adds weather data to the context."""
         context = kwargs
         weather = self.get_current_weather(request)
         context["weather"] = weather
         return context
 
     def get_current_weather(self, request: HttpRequest) -> Weather | str:
+        """Get weather data."""
         ip = self.get_client_ip(request)
         if ip.get("city"):
             geolocator = Nominatim(user_agent="mino_project")
@@ -42,6 +45,7 @@ class WeatherMixin:
         return weather
 
     def get_client_ip(self, request: HttpRequest) -> dict:
+        """Get ip data."""
         remote_address = request.META.get("REMOTE_ADDR")
         ip = remote_address
         x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")

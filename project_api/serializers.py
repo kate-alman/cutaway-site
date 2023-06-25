@@ -21,6 +21,7 @@ class NewsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def to_representation(self, instance):
+        """Adds data from the associated table about the tag to the resulting data."""
         rep_data = super().to_representation(instance)
         rep_data["tag"] = TagSerializer(instance.tag).data
         return rep_data

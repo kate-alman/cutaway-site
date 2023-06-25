@@ -4,6 +4,8 @@ from accounts.models import Profile
 
 
 class PostMixin:
+    """Defines pagination of posts. If an author's blog is selected,
+    then checks if such a user exists and shows his blog."""
     paginate_by = 4
 
     def post(self, request, *args, **kwargs):
@@ -16,6 +18,7 @@ class PostMixin:
 
 class UserMixin:
     def get_user_context(self, self_profile=False, **kwargs):
+        """Adds data about the user from his profile to the context."""
         context = kwargs
         user_id = self.kwargs.get("pk", kwargs.get("pk"))
         if user_id and user_id != self.request.user.pk or self_profile:

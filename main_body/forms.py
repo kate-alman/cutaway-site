@@ -6,6 +6,7 @@ from django.utils.safestring import mark_safe
 
 
 class ImagePreviewWidget(forms.widgets.FileInput):
+    """Shows image preview in profile and post edit form."""
     def render(self, name, value, attrs=None, **kwargs):
         input_html = super().render(name, value, attrs=None, **kwargs)
         try:
@@ -19,6 +20,7 @@ class ImagePreviewWidget(forms.widgets.FileInput):
 
 
 def check_max_file_size(value: TemporaryUploadedFile) -> None:
+    """Checks that the uploaded file (user photo, post image) does not exceed the specified size."""
     limit = 5 * 1024 * 1024
     if value.size > limit:
         raise ValidationError("File too large. Size should not exceed 5 Mb.")

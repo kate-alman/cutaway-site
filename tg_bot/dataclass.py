@@ -1,3 +1,6 @@
+"""Source: https://core.telegram.org/bots/api"""
+
+
 from dataclasses import field
 
 from marshmallow import Schema, EXCLUDE, fields
@@ -13,6 +16,7 @@ class MainData:
 
 @dataclass
 class MessageFrom(MainData):
+    """Sender of the message."""
     id: int
     first_name: Optional[str]
     last_name: Optional[str]
@@ -21,6 +25,7 @@ class MessageFrom(MainData):
 
 @dataclass
 class Chat(MainData):
+    """Conversation the message belongs to."""
     id: int
     type: str
     title: Optional[str]
@@ -31,6 +36,7 @@ class Chat(MainData):
 
 @dataclass
 class Photo(MainData):
+    """Message is a photo."""
     file_id: str
     file_unique_id: str
     width: int
@@ -40,6 +46,7 @@ class Photo(MainData):
 
 @dataclass
 class Message(MainData):
+    """This object represents a message."""
     message_id: int
     from_: MessageFrom = field(metadata={"data_key": "from"})
     chat: Chat
@@ -51,6 +58,7 @@ class Message(MainData):
 
 @dataclass
 class CallbackQuery(MainData):
+    """This object represents an incoming callback query from a callback button in an inline keyboard."""
     id: str
     from_: MessageFrom = field(metadata={"data_key": "from"})
     message: Message
@@ -59,11 +67,13 @@ class CallbackQuery(MainData):
 
 @dataclass
 class ChatMemberUpd(MainData):
+    """This object represents changes in the status of a chat member."""
     date: int
 
 
 @dataclass
 class UpdateObject(MainData):
+    """Incoming update."""
     update_id: Optional[int] = None
     message: Optional[Message] = None
     callback_query: Optional[CallbackQuery] = None
@@ -74,6 +84,7 @@ class UpdateObject(MainData):
 
 @dataclass
 class GetUpdatesResponse(MainData):
+    """For the received list of updates."""
     ok: bool
     result: list[UpdateObject]
 
@@ -82,6 +93,7 @@ class GetUpdatesResponse(MainData):
 
 @dataclass
 class SendMessageResponse(MainData):
+    """For the message being sent (including the keyboard)."""
     ok: bool
     result: Message
 
@@ -89,6 +101,7 @@ class SendMessageResponse(MainData):
 
 
 class PostSchema(Schema):
+    """Scheme for converting and sending posts to the user."""
     user = fields.Str()
     slug = fields.Str()
     title = fields.Str()
